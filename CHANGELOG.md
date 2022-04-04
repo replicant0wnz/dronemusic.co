@@ -30,5 +30,13 @@
 
 > 2022-04-04
 
-## Modifications
+## Mods
 * Changing release notes format
+
+<a name="v1.6"></a>
+## [v1.6](https://github.com/replicant0wnz/dronemusic.co/compare/v1.5...v1.6)
+
+> 2022-04-04
+
+## Mods
+* Use a container for `gh` instead of local
