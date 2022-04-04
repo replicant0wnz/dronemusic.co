@@ -24,3 +24,11 @@
 
 ## Fixes
 * Typeo in the workflow
+
+<a name="v1.5"></a>
+## [v1.5](https://github.com/replicant0wnz/dronemusic.co/compare/v1.4...v1.5)
+
+> 2022-04-04
+
+## Modifications
+* Changing release notes format
