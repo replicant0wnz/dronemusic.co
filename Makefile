@@ -20,7 +20,7 @@ package:
 	tar cfvz $(PACKAGE) $(DIST_PATH)
 
 release:
-	gh release create $(version) dist.tar.gz -F CHANGELOG.md
+	gh release create $(version) dist.tar.gz --generate-notes
 
 clean:
 	rm -rf node_modules dist dist.tar.gz
