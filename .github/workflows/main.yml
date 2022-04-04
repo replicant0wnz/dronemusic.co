@@ -2,14 +2,14 @@ name: main
 
 on: 
   push:
-    tags: [ 1.* ]
+    tags: [ * ]
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   build_package_publish:
-    name: "init → buikd →  package"
+    name: "init → build →  package"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
