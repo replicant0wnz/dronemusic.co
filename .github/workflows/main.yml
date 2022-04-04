@@ -1,0 +1,32 @@
+name: main
+
+on: 
+  push:
+    tags: [ 1.* ]
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+jobs:
+  build_package_publish:
+    name: "init → buikd →  package"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: init
+        run: |
+          make init
+          
+      - name: build
+        run: |
+          make build
+          
+      - name: package
+        run: |
+          make package
+          
+      - name: release
+        run: |
+          make version=$GITHUB_REF_NAME release
