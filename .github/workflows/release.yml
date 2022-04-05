@@ -1,13 +1,15 @@
 name: main
 
-on: [ push ]
+on: 
+  push:
+    tags: [ v1.* ]
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   build_package_publish:
-    name: "init → build"
+    name: "init → build →  package"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,3 +22,11 @@ jobs:
       - name: build
         run: |
           make build
+          
+      - name: package
+        run: |
+          make package
+          
+      - name: release
+        run: |
+          make version=$GITHUB_REF_NAME release
