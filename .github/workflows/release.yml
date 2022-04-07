@@ -6,10 +6,12 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 
 jobs:
   build_package_publish:
-    name: "init → build →  package"
+    name: "init → build →  package → release → deploy → invalidate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
