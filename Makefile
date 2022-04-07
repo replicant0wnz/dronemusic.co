@@ -27,6 +27,7 @@ AWS=$(DOCKER) run -e AWS_SECRET_ACCESS_KEY=$$AWS_SECRET_ACCESS_KEY -e AWS_ACCESS
 
 # Items from $(CONFIG)
 S3_BUCKET := $(shell cat $(CONFIG) | $(JQ) .aws.s3.destination)
+S3_REGION := $(shell cat $(CONFIG) | $(JQ) .aws.s3.region)
 DISTRIBUTION_ID := $(shell cat $(CONFIG) | $(JQ) .aws.cloudfront.distribution_id)
 INVALIDATION_PATH := $(shell cat $(CONFIG) | $(JQ) .aws.cloudfront.invalidation_path) 
 
@@ -44,7 +45,7 @@ release:
 
 deploy:
 	cd dist ; \
-	$(AWS) -v $(SOURCE_PATH)/dist:$(AWS_WORKING_PATH) -w $(AWS_WORKING_PATH) $(AWS_CONTAINER)  s3 sync . s3://$(S3_BUCKET) --delete --acl public-read
+	$(AWS) -e AWS_DEFAULT_REGION:$$S3_REGION -v $(SOURCE_PATH)/dist:$(AWS_WORKING_PATH) -w $(AWS_WORKING_PATH) $(AWS_CONTAINER)  s3 sync . s3://$(S3_BUCKET) --delete --acl public-read
 
 invalidate:
 	$(AWS) $(AWS_CONTAINER) cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths $(INVALIDATION_PATH)
