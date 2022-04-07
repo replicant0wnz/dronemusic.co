@@ -65,3 +65,11 @@
 
 ## Fixes
 * Added secrets for AWS
+
+<a name="v1.11"></a>
+## [v1.11](https://github.com/replicant0wnz/dronemusic.co/compare/v1.10...v1.11)
+
+> 2022-04-07
+
+## Additions
+* Added region to s3 command
