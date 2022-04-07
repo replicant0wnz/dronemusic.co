@@ -40,3 +40,12 @@
 
 ## Mods
 * Use a container for `gh` instead of local
+
+<a name="v1.8"></a>
+## [v1.8](https://github.com/replicant0wnz/dronemusic.co/compare/v1.7...v1.8)
+
+> 2022-04-07
+
+## Additions
+* Added deploy.yaml for actions, will deploy content to AWS on tagging
+
