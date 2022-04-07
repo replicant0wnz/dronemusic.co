@@ -57,3 +57,11 @@
 
 ## Additions
 * Extracting configurable items from the `Makefile` into `makefile.json`
+
+<a name="v1.10"></a>
+## [v1.10](https://github.com/replicant0wnz/dronemusic.co/compare/v1.9...v1.10)
+
+> 2022-04-07
+
+## Fixes
+* Added secrets for AWS
