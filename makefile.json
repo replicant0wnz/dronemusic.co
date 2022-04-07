@@ -1,0 +1,11 @@
+{
+    "aws": {
+        "s3" : {
+            "destination" : "www.dronemusic.co"
+        },
+        "cloudfront": {
+            "distribution_id" : "E3K58SB4UNLCAE",
+            "invalidation_path": "/*"
+        }
+    }
+}
