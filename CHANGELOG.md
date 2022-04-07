@@ -49,3 +49,11 @@
 ## Additions
 * Added deploy.yaml for actions, will deploy content to AWS on tagging
 
+
+<a name="v1.9"></a>
+## [v1.9](https://github.com/replicant0wnz/dronemusic.co/compare/v1.8...v1.9)
+
+> 2022-04-07
+
+## Additions
+* Extracting configurable items from the `Makefile` into `makefile.json`
