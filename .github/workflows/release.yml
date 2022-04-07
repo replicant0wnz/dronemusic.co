@@ -30,3 +30,11 @@ jobs:
       - name: release
         run: |
           make version=$GITHUB_REF_NAME release
+      
+      - name: deploy
+        run: |
+          make deploy
+      
+      - name: invalidate
+        run: |
+          make invalidate
