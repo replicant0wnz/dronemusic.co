@@ -2,7 +2,8 @@ name: main
 
 on: 
   push:
-    tags: [ v1.* ]
+    tags:
+      - v1.*
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
