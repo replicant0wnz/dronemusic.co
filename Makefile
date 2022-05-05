@@ -32,7 +32,7 @@ DISTRIBUTION_ID := $(shell cat $(CONFIG) | $(JQ) .aws.cloudfront.distribution_id
 INVALIDATION_PATH := $(shell cat $(CONFIG) | $(JQ) .aws.cloudfront.invalidation_path) 
 
 init:
-	$(BUILD) npm install
+	$(BUILD) npm install --legacy-peer-deps
 
 build:
 	$(BUILD) npm run build 
