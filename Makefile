@@ -14,7 +14,11 @@ JQ=$(DOCKER) run -i $(JQ_CONTAINER) -c
 
 # Node config
 NODE_CONTAINER=node
-BUILD=$(DOCKER) run -v $(SOURCE_PATH):$(WORKING_PATH) -w $(WORKING_PATH) $(NODE_CONTAINER)
+NODE=$(DOCKER) run -v $(SOURCE_PATH):$(WORKING_PATH) -w $(WORKING_PATH) $(NODE_CONTAINER)
+
+# nginx config
+NGINX_CONTAINER=nginx
+NGINX=$(DOCKER) run -v $(SOURCE_PATH)/dist:/usr/share/nginx/html -p 8080:80 --name nginx -d $(NGINX_CONTAINER)
 
 # Github config
 GH_CONTAINER=ghcr.io/supportpal/github-gh-cli
@@ -32,13 +36,20 @@ DISTRIBUTION_ID := $(shell cat $(CONFIG) | $(JQ) .aws.cloudfront.distribution_id
 INVALIDATION_PATH := $(shell cat $(CONFIG) | $(JQ) .aws.cloudfront.invalidation_path) 
 
 init:
-	$(BUILD) npm install --legacy-peer-deps
+	$(NODE) npm install --legacy-peer-deps
 
 build:
-	$(BUILD) npm run build 
+	$(NODE) npm run build
+	sed -i s/VVERSIONV/$(version)/g dist/index.html
 
 package:
 	tar cfvz $(PACKAGE) $(DIST_PATH)
+
+server:
+	$(NGINX) 
+
+server_stop: 
+	$(DOCKER) rm nginx
 
 release:
 	$(GH) gh release create $(version) dist.tar.gz --generate-notes
@@ -51,6 +62,6 @@ invalidate:
 	$(AWS) $(AWS_CONTAINER) cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths $(INVALIDATION_PATH) --region $(S3_REGION)
 
 clean:
-	rm -rf node_modules dist dist.tar.gz
+	rm -rf node_modules dist dist.tar.gz package-lock.json
 
 all: init build package
