@@ -5,6 +5,7 @@ const cleanCSS = require("gulp-clean-css");
 const inlinesource = require("gulp-inline-source");
 const path = require("path");
 const del = require("del");
+const inject = require("gulp-inject-string");
 
 const html = () =>
   gulp
@@ -17,6 +18,7 @@ const html = () =>
         collapseBooleanAttributes: true,
       })
     )
+    .pipe(inject.replace("BUILD_VERSION",process.env.BUILD_VERSION))
     .pipe(gulp.dest("dist"));
 
 const css = () =>

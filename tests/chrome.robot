@@ -7,7 +7,7 @@ Test Teardown    Test Case Teardown
 *** Test Cases ***
 Verify Version
     Go To   http://localhost:8080 
-    Page Should Contain   1.0.0
+    Page Should Contain   ${BUILD_VERSION}
 
 *** Keywords ***
 

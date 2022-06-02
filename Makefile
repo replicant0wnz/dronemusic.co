@@ -14,11 +14,15 @@ JQ=$(DOCKER) run -i $(JQ_CONTAINER) -c
 
 # Node config
 NODE_CONTAINER=node
-NODE=$(DOCKER) run -v $(SOURCE_PATH):$(WORKING_PATH) -w $(WORKING_PATH) $(NODE_CONTAINER)
+NODE=$(DOCKER) run -v $(SOURCE_PATH):$(WORKING_PATH) -w $(WORKING_PATH) -e BUILD_VERSION=$(version) $(NODE_CONTAINER)
 
 # nginx config
 NGINX_CONTAINER=nginx
 NGINX=$(DOCKER) run -v $(SOURCE_PATH)/dist:/usr/share/nginx/html -p 8080:80 --name nginx -d $(NGINX_CONTAINER)
+
+# Robot config
+ROBOT_CONTAINER=ppodgorsek/robot-framework:latest
+ROBOT=$(DOCKER) run --network host -e ROBOT_OPTIONS="--variable BUILD_VERSION:$(version)" -v $(SOURCE_PATH)/tests:/opt/robotframework/tests -v $(SOURCE_PATH)/reports:/opt/robotframework/reports $(ROBOT_CONTAINER)
 
 # Github config
 GH_CONTAINER=ghcr.io/supportpal/github-gh-cli
@@ -39,8 +43,7 @@ init:
 	$(NODE) npm install --legacy-peer-deps
 
 build:
-	$(NODE) npm run build
-	sed -i s/VVERSIONV/$(version)/g dist/index.html
+	$(NODE) npm run build 
 
 package:
 	tar cfvz $(PACKAGE) $(DIST_PATH)
@@ -49,7 +52,12 @@ server:
 	$(NGINX) 
 
 server_stop: 
+	$(DOCKER) stop nginx
 	$(DOCKER) rm nginx
+
+test:
+	[ -d $(SOURCE_PATH)/reports ] || mkdir $(SOURCE_PATH)/reports
+	$(ROBOT)
 
 release:
 	$(GH) gh release create $(version) dist.tar.gz --generate-notes
@@ -62,6 +70,6 @@ invalidate:
 	$(AWS) $(AWS_CONTAINER) cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths $(INVALIDATION_PATH) --region $(S3_REGION)
 
 clean:
-	rm -rf node_modules dist dist.tar.gz package-lock.json
+	rm -rf node_modules dist dist.tar.gz package-lock.json reports
 
-all: init build package
+all: init build server test server_stop package
