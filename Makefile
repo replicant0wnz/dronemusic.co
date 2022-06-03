@@ -22,7 +22,7 @@ NGINX=$(DOCKER) run -v $(SOURCE_PATH)/dist:/usr/share/nginx/html -p 8080:80 --na
 
 # Robot config
 ROBOT_CONTAINER=ppodgorsek/robot-framework:latest
-ROBOT=$(DOCKER) run --network host -e ROBOT_OPTIONS="--variable BUILD_VERSION:$(version)" -v $(SOURCE_PATH)/tests:/opt/robotframework/tests -v $(SOURCE_PATH)/reports:/opt/robotframework/reports $(ROBOT_CONTAINER)
+ROBOT=$(DOCKER) run --network host -e ROBOT_OPTIONS="--xunit xunit/output --variable BUILD_VERSION:$(version)" -v $(SOURCE_PATH)/tests:/opt/robotframework/tests -v $(SOURCE_PATH)/reports:/opt/robotframework/reports $(ROBOT_CONTAINER)
 
 # Github config
 GH_CONTAINER=ghcr.io/supportpal/github-gh-cli
@@ -56,7 +56,7 @@ server_stop:
 	$(DOCKER) rm nginx
 
 test:
-	mkdir $(SOURCE_PATH)/reports && chmod 777 $(SOURCE_PATH)/reports
+	mkdir -p $(SOURCE_PATH)/reports/xunit && chmod -R 777 $(SOURCE_PATH)/reports
 	$(ROBOT)
 
 release:
