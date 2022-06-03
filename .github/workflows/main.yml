@@ -10,7 +10,7 @@ env:
 
 jobs:
   build_package_publish:
-    name: "init → build"
+    name: "init → build → test"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,4 +22,9 @@ jobs:
           
       - name: build
         run: |
-          make build
+          make build version=$GITHUB_RUN_ID
+
+      - name: test
+        run: |
+          make server
+          make test version=$GITHUB_RUN_ID
