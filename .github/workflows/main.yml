@@ -28,3 +28,9 @@ jobs:
         run: |
           make server
           make test version=$GITHUB_RUN_ID
+
+      - name: publish
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: "reports/*.xml"
