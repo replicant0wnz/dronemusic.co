@@ -56,7 +56,7 @@ server_stop:
 	$(DOCKER) rm nginx
 
 test:
-	[ -d $(SOURCE_PATH)/reports ] || mkdir $(SOURCE_PATH)/reports
+	mkdir $(SOURCE_PATH)/reports
 	$(ROBOT)
 
 release:
