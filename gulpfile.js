@@ -34,7 +34,7 @@ const css = () =>
 
 const purge = () => del(["dist/styles"]);
 
-const assets = () => gulp.src("public/**/*").pipe(gulp.dest("dist"));
+const assets = () => gulp.src("public/*").pipe(gulp.dest("dist"));
 
 const dev = () =>
   gulp.watch(
