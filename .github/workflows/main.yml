@@ -26,7 +26,7 @@ jobs:
 
       - name: test
         run: |
-          make server
+          make nginx_start
           make test version=$GITHUB_RUN_ID
 
       - name: publish
