@@ -7,7 +7,8 @@ Test Teardown    Test Case Teardown
 *** Test Cases ***
 Verify Version
     Go To   http://localhost:8080 
-    Page Should Contain   ${BUILD_VERSION}
+    ${meta_version} =   Get Element Attribute  xpath=//html/head/meta[@name="version"]  content
+    Should Be Equal  ${meta_version}  ${BUILD_VERSION}
 
 *** Keywords ***
 

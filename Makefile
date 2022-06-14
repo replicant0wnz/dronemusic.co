@@ -48,10 +48,10 @@ build:
 package:
 	tar cfvz $(PACKAGE) $(DIST_PATH)
 
-server:
+nginx_start:
 	$(NGINX) 
 
-server_stop: 
+nginx_stop: 
 	$(DOCKER) stop nginx
 	$(DOCKER) rm nginx
 
@@ -67,9 +67,12 @@ deploy:
 	$(AWS) -v $(SOURCE_PATH)/dist:$(AWS_WORKING_PATH) -w $(AWS_WORKING_PATH) $(AWS_CONTAINER)  s3 sync . s3://$(S3_BUCKET) --delete --acl public-read --region $(S3_REGION)
 
 invalidate:
-	$(AWS) $(AWS_CONTAINER) cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths $(INVALIDATION_PATH) --region $(S3_REGION)
+	INVALIDATION=`$(AWS) $(AWS_CONTAINER) cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths $(INVALIDATION_PATH) --region $(S3_REGION)` ; \
+	echo $$INVALIDATION ; \
+	INVALIDATION_ID=`echo $$INVALIDATION | $(JQ) -r .Invalidation.Id` ; \
+	$(AWS) $(AWS_CONTAINER) cloudfront wait invalidation-completed --distribution-id $(DISTRIBUTION_ID) --id $$INVALIDATION_ID
 
 clean:
 	rm -rf node_modules dist dist.tar.gz package-lock.json reports
 
-all: init build server test server_stop package
+all: init build nginx_start test nginx_stop package

@@ -12,7 +12,7 @@ env:
 
 jobs:
   build_package_publish:
-    name: "init → build →  package → release → deploy → invalidate"
+    name: "init → build → test → package → release → deploy → invalidate"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,15 +24,20 @@ jobs:
           
       - name: build
         run: |
-          make build
+          make build version=$GITHUB_REF_NAME
           
+      - name: test
+        run: |
+          make nginx_start
+          make test version=$GITHUB_REF_NAME
+
       - name: package
         run: |
           make package
           
       - name: release
         run: |
-          make version=$GITHUB_REF_NAME release
+          make release version=$GITHUB_REF_NAME
       
       - name: deploy
         run: |
