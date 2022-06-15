@@ -64,12 +64,12 @@ release:
 
 deploy:
 	cd dist ; \
-	$(AWS) -v $(SOURCE_PATH)/dist:$(AWS_WORKING_PATH) -w $(AWS_WORKING_PATH) $(AWS_CONTAINER)  s3 sync . s3://$(S3_BUCKET) --delete --acl public-read --region $(S3_REGION)
+	$(AWS) -v $(SOURCE_PATH)/dist:$(AWS_WORKING_PATH) -w $(AWS_WORKING_PATH) $(AWS_CONTAINER)  s3 sync . s3://$(S3_BUCKET) --acl public-read --region $(S3_REGION)
 
 invalidate:
 	INVALIDATION=`$(AWS) $(AWS_CONTAINER) cloudfront create-invalidation --distribution-id $(DISTRIBUTION_ID) --paths $(INVALIDATION_PATH) --region $(S3_REGION)` ; \
-	echo $$INVALIDATION ; \
 	INVALIDATION_ID=`echo $$INVALIDATION | $(JQ) -r .Invalidation.Id` ; \
+	echo "Invalidation ID : $$INVALIDATION_ID"
 	$(AWS) $(AWS_CONTAINER) cloudfront wait invalidation-completed --distribution-id $(DISTRIBUTION_ID) --id $$INVALIDATION_ID
 
 clean:
